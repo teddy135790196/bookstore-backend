@@ -1,11 +1,17 @@
 const express = require("express");
-const cors = require("cors");
 const app = express();
 const db = require("./db");
 const PORT = process.env.PORT || 3000;
 
-app.use(cors()); // ✅ 加這行解決 CORS 問題
 app.use(express.json());
+
+// ✅ 手動設定 CORS headers（不使用套件）
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // 改為你的前端網址也可
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 app.get("/", (req, res) => {
   res.send("✅ Node.js API 正常運行中");
